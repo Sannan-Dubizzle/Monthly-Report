@@ -73,7 +73,7 @@ module Api
       def lock_zone
         require_permission!('reports:lock_zone') and return unless performed?
         report = MonthlyReport.find(params[:id])
-        zone = report.unit.scope_level == 'Zone' ? report.unit : report.unit.parent
+        zone = report.unit.zone? ? report.unit : report.unit.parent
         month = report.month
         uc_ids = zone.children.pluck(:id)
         existing_ids = MonthlyReport.where(unit_id: uc_ids, month: month).pluck(:unit_id)
@@ -262,7 +262,7 @@ module Api
 
       def find_zila(unit)
         current = unit
-        current = current.parent while current.scope_level != 'Zila' && current.parent
+        current = current.parent while !current.zila? && current.parent
         current
       end
 
@@ -276,10 +276,12 @@ module Api
       end
 
       def gather_reports_for_export(unit, month)
-        unit_ids = case unit.scope_level
-                   when 'UC' then [unit.id]
-                   when 'Zone' then [unit.id] + unit.children.pluck(:id)
-                   when 'Zila' then collect_all_unit_ids(unit)
+        unit_ids = if unit.uc?
+                     [unit.id]
+                   elsif unit.zone?
+                     [unit.id] + unit.children.pluck(:id)
+                   else
+                     collect_all_unit_ids(unit)
                    end
         MonthlyReport.where(unit_id: unit_ids, month: month, status: 'finalized')
                      .includes(:unit, :report_activities, :report_field_values)

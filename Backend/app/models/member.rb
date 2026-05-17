@@ -32,6 +32,6 @@ class Member < ApplicationRecord
 
   def uc_must_be_uc_scope
     return unless uc
-    errors.add(:uc_id, 'must reference a UC-level unit') unless uc.scope_level == 'UC'
+    errors.add(:uc_id, 'must reference a UC-level unit') unless uc.uc?
   end
 end

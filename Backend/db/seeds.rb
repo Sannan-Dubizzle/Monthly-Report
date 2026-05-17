@@ -59,22 +59,22 @@ end
 
 # Activity definitions
 [
-  ['Youth Meeting', 'UC', 1],
-  ['Study Circle',  'UC', 0],
-  ['Sports Event',  'UC', 0],
+  ['Youth Meeting', 'uc', 1],
+  ['Study Circle',  'uc', 0],
+  ['Sports Event',  'uc', 0],
 ].each do |name, scope, comp|
   ActivityDefinition.find_or_create_by!(name: name, scope_level: scope) { |a| a.compulsory_per_month = comp }
 end
 
 # Form sections
 sections_data = [
-  ['leadership',      'Leadership Info',       'UC',   1],
-  ['youth_meeting',   'Monthly Youth Meeting', 'UC',   2],
-  ['team_changes',    'Team Changes',          'UC',   3],
-  ['activities',      'Activities',            'UC',   4],
-  ['zone_summary',    'Zone Summary',          'Zone', 1],
-  ['zone_activities', 'Zone Activities',       'Zone', 2],
-  ['zila_summary',    'Zila Summary',          'Zila', 1],
+  ['leadership',      'Leadership Info',       'uc',   1],
+  ['youth_meeting',   'Monthly Youth Meeting', 'uc',   2],
+  ['team_changes',    'Team Changes',          'uc',   3],
+  ['activities',      'Activities',            'uc',   4],
+  ['zone_summary',    'Zone Summary',          'zone', 1],
+  ['zone_activities', 'Zone Activities',       'zone', 2],
+  ['zila_summary',    'Zila Summary',          'zila', 1],
 ]
 sections = {}
 sections_data.each do |key, label, scope, idx|
